@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.6.0",
+    "aos": "^2.3.1",
+    "apexcharts": "^3.51.0",
+    "leaflet": "^1.9.4",
+    "simple-statistics": "^7.7.2",
+    "tailwindcss": "^2.2.1",
+    "typeface-roboto": "^1.1.13"
+  }
+}

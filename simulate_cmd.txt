@@ -1,0 +1,31 @@
+
+cd C:\xampp\php
+
+ .\php.exe C:\xampp\htdocs\heat_w8_db\php\random.php
+
+
+
+project structure
+dist
+node_modules
+php/admin_dashboard.php
+db_connection.php
+fetch_alerts.php
+ fetch_latest_data.php
+fetch_locations.php
+ fetch_sensors_updates.php
+fetch_sensor_data.php
+get_history.php
+ logout.php
+ random.php
+sensor_receiver.php
+ user_dashboard.php
+public/assets
+src/js scripts
+index.php/login
+package-lock.json
+package.json
+postcss.config.js
+tailwind.config.js
+
+
