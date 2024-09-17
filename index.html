@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heat Index Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+<!-- Navbar -->
+<nav class="bg-blue-600 p-4 text-white">
+    <div class="container mx-auto flex justify-between">
+        <div class="text-lg font-bold">Heat Index Dashboard</div>
+        <div>
+            <a href="#" class="px-4 hover:text-blue-200">Alerts</a>
+            <a href="#" class="px-4 hover:text-blue-200">Sensor Data</a>
+            <a href="#" class="px-4 hover:text-blue-200">Stations</a>
+            <a href="#" class="px-4 hover:text-blue-200">Users</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Dashboard Content -->
+<div class="container mx-auto mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Alerts Section -->
+    <div class="col-span-2 bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Alerts</h2>
+        <ul>
+            <li class="flex justify-between p-4 bg-red-100 rounded-lg mb-2">
+                <div>
+                    <p class="text-red-600 font-semibold">High Heat Index Alert</p>
+                    <p>Location: BSIS Building</p>
+                    <p>Heat Index: 45.2°C</p>
+                </div>
+                <p class="text-sm text-gray-600">10 mins ago</p>
+            </li>
+            <li class="flex justify-between p-4 bg-yellow-100 rounded-lg mb-2">
+                <div>
+                    <p class="text-yellow-600 font-semibold">Moderate Heat Index</p>
+                    <p>Location: Farmer's Hall</p>
+                    <p>Heat Index: 38.5°C</p>
+                </div>
+                <p class="text-sm text-gray-600">30 mins ago</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Sensor Data Section -->
+    <div class="col-span-1 bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Sensor Data</h2>
+        <ul>
+            <li class="flex justify-between p-4 bg-gray-100 rounded-lg mb-2">
+                <div>
+                    <p class="font-semibold">BSIS Building</p>
+                    <p>Temperature: 32.5°C</p>
+                    <p>Humidity: 60%</p>
+                    <p>Heat Index: 42.8°C</p>
+                </div>
+                <p class="text-sm text-gray-600">5 mins ago</p>
+            </li>
+            <li class="flex justify-between p-4 bg-gray-100 rounded-lg mb-2">
+                <div>
+                    <p class="font-semibold">Farmer's Hall</p>
+                    <p>Temperature: 30.2°C</p>
+                    <p>Humidity: 55%</p>
+                    <p>Heat Index: 39.5°C</p>
+                </div>
+                <p class="text-sm text-gray-600">15 mins ago</p>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Station Map Section -->
+    <div class="col-span-3 bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Sensor Stations</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex items-center">
+                <div class="bg-blue-600 text-white p-4 rounded-full mr-4">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div>
+                    <p class="font-semibold">BSIS Building</p>
+                    <p>Latitude: 7.9469980, Longitude: 123.5875620</p>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <div class="bg-blue-600 text-white p-4 rounded-full mr-4">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div>
+                    <p class="font-semibold">Farmer's Hall</p>
+                    <p>Latitude: 7.9471770, Longitude: 123.5879210</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Management Section -->
+    <div class="col-span-3 bg-white p-6 rounded-lg shadow-lg mt-8">
+        <h2 class="text-2xl font-bold mb-4">User Management</h2>
+        <table class="table-auto w-full">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-4 py-2">Username</th>
+                    <th class="px-4 py-2">Role</th>
+                    <th class="px-4 py-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border px-4 py-2">admin</td>
+                    <td class="border px-4 py-2">Admin</td>
+                    <td class="border px-4 py-2">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded">Edit</button>
+                        <button class="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border px-4 py-2">user1</td>
+                    <td class="border px-4 py-2">User</td>
+                    <td class="border px-4 py-2">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded">Edit</button>
+                        <button class="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

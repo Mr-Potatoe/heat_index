@@ -1,199 +1,113 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const itemsPerPage = 5; // Number of items per page
 
-// Function to populate table rows with pagination support
-function populateTableBody(data, tbody, currentPage, itemsPerPage) {
-    tbody.innerHTML = ''; // Clear existing rows
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const paginatedData = data.slice(startIndex, endIndex);
-
-    paginatedData.forEach((entry, index) => {
-        const tr = document.createElement('tr');
-        tr.classList.add(index % 2 === 0 ? 'bg-white' : 'bg-gray-50'); // Alternating row colors
-        tr.classList.add(index % 2 === 0 ? 'dark:bg-gray-700' : 'dark:bg-gray-800'); // Text color based on row color
-       tr.innerHTML = `
-            <td class="px-5 py-3 border-b border-gray-200 text-center text-sm">${entry.temperature}</td>
-            <td class="px-5 py-3 border-b border-gray-200 text-center text-sm">${entry.humidity}</td>
-            <td class="px-5 py-3 border-b border-gray-200 text-center text-sm">${entry.heat_index}</td>
-            <td class="px-5 py-3 border-b border-gray-200 text-center text-sm">${entry.timestamp}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-// Function to create pagination controls with Font Awesome icons and tooltips
-function createPaginationControls(totalItems, currentPage, itemsPerPage, containerId, data, tbody) {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const maxVisibleButtons = 3; // Adjust the number of visible page buttons as needed
-
-    // Clear existing pagination controls
-    const paginationContainer = document.getElementById(containerId);
-    paginationContainer.innerHTML = '';
-
-   // Function to create individual page button with tooltip
-    function createPageButton(pageNum, tooltipText) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = pageNum;
-        pageButton.classList.add('px-3', 'py-1', 'bg-blue-200', 'text-gray-800', 'rounded','transition-transform', 'mx-1'); // Add transition class
-        pageButton.setAttribute('title', tooltipText); // Tooltip text
-
-        // Apply transform on hover
-        pageButton.classList.add('transform', 'hover:scale-105');
-
-        if (pageNum === currentPage) {
-            pageButton.classList.add('bg-blue-500', 'text-white');
-        } else {
-            pageButton.addEventListener('click', () => {
-                populateTableBody(data, tbody, pageNum, itemsPerPage);
-                createPaginationControls(totalItems, pageNum, itemsPerPage, containerId, data, tbody);
-            });
+    async function fetchSensorData() {
+        try {
+            const response = await fetch('../fetch_php/get_history.php');
+            const data = await response.json();
+            renderTables(data);
+        } catch (error) {
+            console.error('Error fetching sensor data:', error);
         }
-        paginationContainer.appendChild(pageButton);
     }
 
+    function renderTables(data) {
+        const container = document.getElementById('history-sensor-data');
+        container.innerHTML = ''; // Clear previous content
 
-    // First Button
-    const firstButton = document.createElement('button');
-    firstButton.innerHTML = '<i class="fas fa-angle-double-left"></i>';
-    firstButton.classList.add('px-3', 'py-1', 'bg-blue-500', 'text-white', 'rounded', 'mr-2', 'transition-transform'); // Add transition class
-    firstButton.setAttribute('title', 'First'); // Tooltip for first button
+        Object.entries(data).forEach(([stationId, stationData]) => {
+            const location = stationData.location; // Get location for each station
+            const tableContainer = document.createElement('div');
+            tableContainer.classList.add('bg-white', 'dark:bg-gray-900', 'border', 'border-gray-200', 'dark:border-gray-700', 'rounded-md', 'shadow-md', 'mb-4', 'p-4');
 
-    // Apply transform on hover
-    firstButton.classList.add('transform', 'hover:scale-105');
+            const locationHeader = document.createElement('h2');
+            locationHeader.classList.add('text-xl', 'font-semibold', 'mb-2', 'text-gray-800', 'dark:text-white');
+            locationHeader.textContent = `Location: ${location}`;
+            tableContainer.appendChild(locationHeader);
 
-    firstButton.disabled = currentPage === 1;
-    firstButton.addEventListener('click', () => {
-        populateTableBody(data, tbody, 1, itemsPerPage);
-        createPaginationControls(totalItems, 1, itemsPerPage, containerId, data, tbody);
-    });
-    paginationContainer.appendChild(firstButton);
+            const table = document.createElement('table');
+            table.classList.add('w-full', 'table-auto', 'overflow-x-auto');
 
-    // Previous Button
-    const prevButton = document.createElement('button');
-    prevButton.innerHTML = '<i class="fas fa-angle-left"></i>';
-    prevButton.classList.add('px-3', 'py-1', 'bg-blue-500', 'text-white', 'rounded', 'mr-2', 'transition-transform'); // Add transition class
-    prevButton.setAttribute('title', 'Previous'); // Tooltip for previous button
+            const thead = document.createElement('thead');
+            thead.classList.add('bg-gray-50', 'dark:bg-gray-800');
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = `
+                <th class="p-3 text-center border-b">Temperature</th>
+                <th class="p-3 text-center border-b">Humidity</th>
+                <th class="p-3 text-center border-b">Heat Index</th>
+                <th class="p-3 text-center border-b">Timestamp</th>
+            `;
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
 
-    // Apply transform on hover
-    prevButton.classList.add('transform', 'hover:scale-105');
+            const tbody = document.createElement('tbody');
+            table.appendChild(tbody);
 
-    prevButton.disabled = currentPage === 1;
-    prevButton.addEventListener('click', () => {
-        if (currentPage > 1) {
-            populateTableBody(data, tbody, currentPage - 1, itemsPerPage);
-            createPaginationControls(totalItems, currentPage - 1, itemsPerPage, containerId, data, tbody);
-        }
-    });
-    paginationContainer.appendChild(prevButton);
+            const paginationControls = document.createElement('div');
+            paginationControls.classList.add('flex', 'justify-center', 'mt-4');
 
+            let currentPage = 1;
+            const totalPages = Math.ceil(stationData.data.length / itemsPerPage);
 
-    // Calculate range of page buttons around the current page
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+            function renderPage(page) {
+                tbody.innerHTML = ''; // Clear previous content
 
-    if (endPage - startPage + 1 < maxVisibleButtons) {
-        startPage = Math.max(1, endPage - maxVisibleButtons + 1);
-    }
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = Math.min(startIndex + itemsPerPage, stationData.data.length);
 
-    // Display page buttons
-    for (let pageNum = startPage; pageNum <= endPage; pageNum++) {
-        createPageButton(pageNum, `Page ${pageNum}`); // Tooltip text for page buttons
-    }
-
-    // Next Button
-    const nextButton = document.createElement('button');
-    nextButton.innerHTML = '<i class="fas fa-angle-right"></i>';
-    nextButton.classList.add('px-3', 'py-1', 'bg-blue-500', 'text-white', 'rounded', 'ml-2', 'transition-transform'); // Add transition class
-    nextButton.setAttribute('title', 'Next'); // Tooltip for next button
-
-    // Apply transform on hover
-    nextButton.classList.add('transform', 'hover:scale-105');
-
-    nextButton.disabled = currentPage === totalPages;
-    nextButton.addEventListener('click', () => {
-        if (currentPage < totalPages) {
-            populateTableBody(data, tbody, currentPage + 1, itemsPerPage);
-            createPaginationControls(totalItems, currentPage + 1, itemsPerPage, containerId, data, tbody);
-        }
-    });
-    paginationContainer.appendChild(nextButton);
-
-    // Last Button
-    const lastButton = document.createElement('button');
-    lastButton.innerHTML = '<i class="fas fa-angle-double-right"></i>';
-    lastButton.classList.add('px-3', 'py-1', 'bg-blue-500', 'text-white', 'rounded', 'ml-2', 'transition-transform'); // Add transition class
-    lastButton.setAttribute('title', 'Last'); // Tooltip for last button
-
-    // Apply transform on hover
-    lastButton.classList.add('transform', 'hover:scale-105');
-
-    lastButton.disabled = currentPage === totalPages;
-    lastButton.addEventListener('click', () => {
-        populateTableBody(data, tbody, totalPages, itemsPerPage);
-        createPaginationControls(totalItems, totalPages, itemsPerPage, containerId, data, tbody);
-    });
-    paginationContainer.appendChild(lastButton);
-}
-
-// Function to filter data based on custom date range
-function filterDataByDateRange(data, startDate, endDate) {
-    const filteredData = data.filter(entry => {
-        const entryTimestamp = new Date(entry.timestamp).getTime();
-        const startTimestamp = new Date(startDate).getTime();
-        const endTimestamp = new Date(endDate).getTime();
-        return entryTimestamp >= startTimestamp && entryTimestamp <= endTimestamp;
-    });
-    return filteredData;
-}
-
-// Function to fetch and populate data
-function fetchDataAndPopulateTables() {
-    fetch('../fetch_php/get_history.php')
-        .then(response => response.json())
-        .then(data => {
-            const tbodyBsis = document.querySelector('#tbodyBsis');
-            const tbodyFarmersHall = document.querySelector('#tbodyFarmersHall');
-            const itemsPerPage = 10; // Adjust as needed
-
-            // Populate BSIS Building table with initial data
-            populateTableBody(data.bsis_building, tbodyBsis, 1, itemsPerPage);
-            // Create pagination controls for BSIS Building
-            createPaginationControls(data.bsis_building.length, 1, itemsPerPage, 'paginationBsis', data.bsis_building, tbodyBsis);
-
-            // Populate Farmers's Hall table with initial data
-            populateTableBody(data.farmers_hall, tbodyFarmersHall, 1, itemsPerPage);
-            // Create pagination controls for Farmers's Hall
-            createPaginationControls(data.farmers_hall.length, 1, itemsPerPage, 'paginationFarmersHall', data.farmers_hall, tbodyFarmersHall);
-
-            // Add event listener to apply filter button for BSIS Building
-            document.getElementById('filterBsisButton').addEventListener('click', function() {
-                const startDate = document.getElementById('startDateBsis').value;
-                const endDate = document.getElementById('endDateBsis').value;
-                if (startDate && endDate) {
-                    const filteredData = filterDataByDateRange(data.bsis_building, startDate, endDate);
-                    populateTableBody(filteredData, tbodyBsis, 1, itemsPerPage);
-                    createPaginationControls(filteredData.length, 1, itemsPerPage, 'paginationBsis', filteredData, tbodyBsis);
-                } else {
-                    alert('Please select both start and end dates.');
+                for (let i = startIndex; i < endIndex; i++) {
+                    const entry = stationData.data[i];
+                    const row = document.createElement('tr');
+                    row.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700');
+                    row.innerHTML = `
+                        <td class="p-3 border-b text-center">${entry.temperature} °C</td>
+                        <td class="p-3 border-b text-center">${entry.humidity} %</td>
+                        <td class="p-3 border-b text-center">${entry.heat_index} °C</td>
+                        <td class="p-3 border-b text-center">${new Date(entry.timestamp).toLocaleString()}</td>
+                    `;
+                    tbody.appendChild(row);
                 }
-            });
 
-            // Add event listener to apply filter button for Farmers's Hall
-            document.getElementById('filterFarmersHallButton').addEventListener('click', function() {
-                const startDate = document.getElementById('startDateFarmersHall').value;
-                const endDate = document.getElementById('endDateFarmersHall').value;
-                if (startDate && endDate) {
-                    const filteredData = filterDataByDateRange(data.farmers_hall, startDate, endDate);
-                    populateTableBody(filteredData, tbodyFarmersHall, 1, itemsPerPage);
-                    createPaginationControls(filteredData.length, 1, itemsPerPage, 'paginationFarmersHall', filteredData, tbodyFarmersHall);
-                } else {
-                    alert('Please select both start and end dates.');
+                // Render pagination controls
+                paginationControls.innerHTML = ''; // Clear previous controls
+
+                const createPageButton = (page, text) => {
+                    const button = document.createElement('button');
+                    button.textContent = text;
+                    button.classList.add('px-4', 'py-2', 'border', 'border-gray-300', 'bg-white', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-white', 'rounded-md', 'mx-1', 'hover:bg-gray-200', 'dark:hover:bg-gray-600');
+                    button.addEventListener('click', () => {
+                        currentPage = page;
+                        renderPage(currentPage);
+                    });
+                    return button;
+                };
+
+                // Limit page buttons to 3
+                const maxButtons = 3;
+                const startButton = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+                const endButton = Math.min(totalPages, startButton + maxButtons - 1);
+
+                if (currentPage > 1) {
+                    paginationControls.appendChild(createPageButton(currentPage - 1, 'Previous'));
                 }
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
+
+                for (let i = startButton; i <= endButton; i++) {
+                    paginationControls.appendChild(createPageButton(i, i));
+                }
+
+                if (currentPage < totalPages) {
+                    paginationControls.appendChild(createPageButton(currentPage + 1, 'Next'));
+                }
+            }
+
+            // Initial render of the first page
+            renderPage(currentPage);
+            tableContainer.appendChild(table);
+            tableContainer.appendChild(paginationControls);
+            container.appendChild(tableContainer);
         });
-}
+    }
 
-// Fetch data and populate tables on page load
-fetchDataAndPopulateTables();
+    // Fetch sensor data when the page loads
+    fetchSensorData();
+});

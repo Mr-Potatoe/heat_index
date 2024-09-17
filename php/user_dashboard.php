@@ -317,77 +317,17 @@
         <i class="fas fa-info-circle mr-2 text-blue-500 dark:text-blue-300" title="Note"></i>
         Historical data updates every 5 minutes for better performance.
     </p>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- BSIS Building Table -->
-        <div id="history-bsis" class="p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-white rounded-lg shadow-md">
-            <h2 class="text-xl font-bold mb-4 flex items-center">
-                <i class="fas fa-school mr-2"></i>BSIS Building
-            </h2>
-            <div class="flex flex-col lg:flex-row mb-4 space-y-4 lg:space-y-0 lg:space-x-4 items-center">
-                <div class="flex items-center space-x-2">
-                    <label for="startDateBsis" class="text-sm font-medium">Start Date:</label>
-                    <input type="datetime-local" id="startDateBsis" class="bg-gray-200 dark:bg-gray-700 rounded-lg px-2 py-1 w-full lg:w-48" step="1">
-                </div>
-                <div class="flex items-center space-x-2">
-                    <label for="endDateBsis" class="text-sm font-medium">End Date:</label>
-                    <input type="datetime-local" id="endDateBsis" class="bg-gray-200 dark:bg-gray-700 rounded-lg px-2 py-1 w-full lg:w-48" step="1">
-                </div>
-                <button id="filterBsisButton" class="bg-blue-500 text-white px-4 py-2 rounded-lg transition-transform transform hover:scale-105 w-full lg:w-auto mt-4 lg:mt-0">Apply</button>
-            </div>
-            <div class="overflow-x-auto mb-4">
-                <table id="sensorDataTableBsis" class="min-w-full leading-normal border-collapse">
-                    <thead>
-                        <tr class="bg-gray-300 dark:bg-gray-900 text-gray-700 dark:text-gray-200 uppercase text-xs font-semibold border-b-2 border-gray-200 dark:border-gray-800">
-                            <th class="px-4 py-3 text-center">Temperature</th>
-                            <th class="px-4 py-3 text-center">Humidity</th>
-                            <th class="px-4 py-3 text-center">Heat Index</th>
-                            <th class="px-4 py-3 text-center">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyBsis">
-                        <!-- Table rows will be populated dynamically with JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-            <!-- Pagination controls for BSIS Building -->
-            <div id="paginationBsis" class="flex justify-end mt-4"></div>
-        </div>
-        <!-- Farmers Hall Table -->
-        <div id="history-farmers-hall" class="p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-white rounded-lg shadow-md">
-            <h2 class="text-xl font-bold mb-4 flex items-center">
-                <i class="fas fa-school mr-2"></i>Farmers Hall
-            </h2>
-            <div class="flex flex-col lg:flex-row mb-4 space-y-4 lg:space-y-0 lg:space-x-4 items-center">
-                <div class="flex items-center space-x-2">
-                    <label for="startDateFarmersHall" class="text-sm font-medium">Start Date:</label>
-                    <input type="datetime-local" id="startDateFarmersHall" class="bg-gray-200 dark:bg-gray-700 rounded-lg px-2 py-1 w-full lg:w-48" step="1">
-                </div>
-                <div class="flex items-center space-x-2">
-                    <label for="endDateFarmersHall" class="text-sm font-medium">End Date:</label>
-                    <input type="datetime-local" id="endDateFarmersHall" class="bg-gray-200 dark:bg-gray-700 rounded-lg px-2 py-1 w-full lg:w-48" step="1">
-                </div>
-                <button id="filterFarmersHallButton" class="bg-blue-500 text-white px-4 py-2 rounded-lg transition-transform transform hover:scale-105 w-full lg:w-auto mt-4 lg:mt-0">Apply</button>
-            </div>
-            <div class="overflow-x-auto mb-4">
-                <table id="sensorDataTableFarmersHall" class="min-w-full leading-normal border-collapse">
-                    <thead>
-                        <tr class="bg-gray-300 dark:bg-gray-900 text-gray-700 dark:text-gray-200 uppercase text-xs font-semibold border-b-2 border-gray-200 dark:border-gray-800">
-                            <th class="px-4 py-3 text-center">Temperature</th>
-                            <th class="px-4 py-3 text-center">Humidity</th>
-                            <th class="px-4 py-3 text-center">Heat Index</th>
-                            <th class="px-4 py-3 text-center">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyFarmersHall">
-                        <!-- Table rows will be populated dynamically with JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-            <!-- Pagination controls for Farmers Hall -->
-            <div id="paginationFarmersHall" class="flex justify-end mt-4"></div>
+    <div id="history-content" class="grid grid-cols-1 gap-6">
+        <!-- Sensor Data Table Container -->
+        <div id="history-sensor-data" class="space-y-6">
+            <!-- Dynamic tables will be inserted here -->
         </div>
     </div>
+    <div id="pagination-controls" class="flex justify-center mt-6">
+        <!-- Pagination controls will be inserted here -->
+    </div>
 </section>
+
 
 </main>
 <!-- Footer -->

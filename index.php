@@ -97,24 +97,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <!-- Font Awesome icons -->
-    <script>
-    const passwordInput = document.getElementById('password');
-    const passwordToggle = document.getElementById('password-toggle');
-    const passwordToggleIcon = document.getElementById('password-toggle-icon');
+<script>
+const passwordInput = document.getElementById('password');
+const passwordToggle = document.getElementById('password-toggle');
+const passwordToggleIcon = document.getElementById('password-toggle-icon');
 
-    passwordToggle.addEventListener('click', function() {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
+passwordToggle.addEventListener('click', function() {
+    // Toggle password input type between "password" and "text"
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
 
-        // Toggle eye and eye-slash classes
-        if (type === 'password') {
-            passwordToggleIcon.classList.remove('fas fa-eye-slash');
-            passwordToggleIcon.classList.add('fas fa-eye');
-        } else {
-            passwordToggleIcon.classList.remove('fas fa-eye');
-            passwordToggleIcon.classList.add('fas fa-eye-slash');
-        }
-    });
+    // Toggle the icon between "eye" and "eye-slash"
+    if (type === 'password') {
+        passwordToggleIcon.classList.remove('fa-eye-slash');
+        passwordToggleIcon.classList.add('fa-eye');
+    } else {
+        passwordToggleIcon.classList.remove('fa-eye');
+        passwordToggleIcon.classList.add('fa-eye-slash');
+    }
+});
+
 </script>
 
 </body>

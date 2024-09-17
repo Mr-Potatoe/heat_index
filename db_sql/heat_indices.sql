@@ -18,6 +18,9 @@ SET time_zone = '+08:00';  -- Set time zone to Philippine time
 
 --
 -- Database: `heat_indices`
+
+CREATE DATABASE heat_indices;;
+USE heat_indices;
 --
 
 -- --------------------------------------------------------

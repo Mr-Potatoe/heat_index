@@ -1,56 +1,46 @@
 <?php
 require_once '../php/db_connection.php';
 
-// Function to fetch sensor data for a given station
-function fetchSensorData($conn, $station_id) {
-    $sql = "SELECT temperature, humidity, heat_index, timestamp 
-            FROM sensor_data
-            WHERE station_id = ?
-            ORDER BY timestamp DESC"; 
+// Function to fetch sensor data for all stations
+function fetchAllSensorData($conn) {
+    $sql = "
+        SELECT ss.station_id, ss.location, sd.temperature, sd.humidity, sd.heat_index, sd.timestamp
+        FROM sensor_station ss
+        JOIN sensor_data sd ON ss.station_id = sd.station_id
+        ORDER BY ss.station_id, sd.timestamp DESC
+    ";
 
-    $stmt = $conn->prepare($sql);
-
-    if ($stmt === false) {
-        return []; // Return an empty array or handle error as needed
-    }
-
-    $stmt->bind_param("i", $station_id);
-
-    if (!$stmt->execute()) {
-        return []; // Return an empty array or handle error as needed
-    }
-
-    $result = $stmt->get_result();
+    $result = $conn->query($sql);
 
     $data = array();
 
-    while ($row = $result->fetch_assoc()) {
-        $data[] = $row;
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $station_id = $row['station_id'];
+            if (!isset($data[$station_id])) {
+                $data[$station_id] = [
+                    'location' => $row['location'],
+                    'data' => []
+                ];
+            }
+            $data[$station_id]['data'][] = [
+                'temperature' => $row['temperature'],
+                'humidity' => $row['humidity'],
+                'heat_index' => $row['heat_index'],
+                'timestamp' => $row['timestamp']
+            ];
+        }
     }
 
-    $stmt->close();
+    $conn->close();
 
     return $data;
 }
 
-// Get station_id for BSIS Building and Farmers's Hall
-$station_id_bsis = 1;
-$station_id_farmers_hall = 2;
+// Fetch all sensor data
+$data = fetchAllSensorData($conn);
 
-// Fetch data for BSIS Building (station_id = 1)
-$data_bsis = fetchSensorData($conn, $station_id_bsis);
-
-// Fetch data for Farmers's Hall (station_id = 2)
-$data_farmers_hall = fetchSensorData($conn, $station_id_farmers_hall);
-
-$conn->close();
-
-// Combine data into a single array to send as JSON response
-$response = [
-    'bsis_building' => $data_bsis,
-    'farmers_hall' => $data_farmers_hall
-];
-
+// Output JSON encoded data
 header('Content-Type: application/json');
-echo json_encode($response);
+echo json_encode($data);
 ?>

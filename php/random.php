@@ -81,7 +81,7 @@ foreach ($stations as $station) {
     $context = stream_context_create($opts);
 
     // Send the POST request to sensor_receiver.php
-    $response = @file_get_contents('http://localhost/heat_w8_db/php/sensor_receiver.php', false, $context);
+    $response = @file_get_contents('http://localhost/heat_index/php/sensor_receiver.php', false, $context);
 
     // Check if request was successful
     if ($response !== false) {

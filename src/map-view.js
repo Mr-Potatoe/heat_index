@@ -243,6 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     })();
 
+
+
     // Initialize the map when the map section is clicked or becomes visible
     mapSection.addEventListener('click', MapModule.initialize);
 

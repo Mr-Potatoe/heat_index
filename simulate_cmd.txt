@@ -1,7 +1,7 @@
 
 cd C:\xampp\php
 
- .\php.exe C:\xampp\htdocs\heat_w8_db\php\random.php
+ .\php.exe C:\xampp\htdocs\heat_index\php\random.php
 
 
 

@@ -39,10 +39,22 @@ function calculate_heat_index($temperature, $humidity) {
     return round($heat_index, 2); // Round to 2 decimal places
 }
 
-// Simulate sensor data for each station
+// Updated list of sensor stations
 $stations = array(
     array('station_id' => 1, 'location' => 'BSIS Building', 'latitude' => 7.9469980, 'longitude' => 123.5875620),
-    array('station_id' => 2, 'location' => 'Farmers\'s Hall', 'latitude' => 7.9471770, 'longitude' => 123.5879210)
+    array('station_id' => 2, 'location' => 'Farmers\'s Hall', 'latitude' => 7.9471770, 'longitude' => 123.5879210),
+    array('station_id' => 3, 'location' => 'First location near guardhouse', 'latitude' => 7.9473004, 'longitude' => 123.5876167),
+    array('station_id' => 4, 'location' => 'Second location near main building right side', 'latitude' => 7.9480162, 'longitude' => 123.5881823),
+    array('station_id' => 5, 'location' => '3rd location behind main hall', 'latitude' => 7.9476420, 'longitude' => 123.5881160),
+    array('station_id' => 6, 'location' => '4th location near Akasya tree (left)', 'latitude' => 7.9482380, 'longitude' => 123.5885240),
+    array('station_id' => 7, 'location' => '5th location near Akasya tree (right)', 'latitude' => 7.9481550, 'longitude' => 123.5886940),
+    array('station_id' => 8, 'location' => '6th location front yard Oasis', 'latitude' => 7.9480310, 'longitude' => 123.5889620),
+    array('station_id' => 9, 'location' => '7th location behind Crim building', 'latitude' => 7.9476180, 'longitude' => 123.5883540),
+    array('station_id' => 10, 'location' => '8th location Agri place', 'latitude' => 7.9472520, 'longitude' => 123.5882730),
+    array('station_id' => 11, 'location' => '9th location Agri place behind Farmers Hall', 'latitude' => 7.9469680, 'longitude' => 123.5881530),
+    array('station_id' => 12, 'location' => '10th location near ROTC office', 'latitude' => 7.9462340, 'longitude' => 123.5871250),
+    array('station_id' => 13, 'location' => '11th location Pundol basketball court', 'latitude' => 7.9456080, 'longitude' => 123.5876410),
+    array('station_id' => 14, 'location' => '12th location near ROTC office', 'latitude' => 7.9461940, 'longitude' => 123.5869550)
 );
 
 while (true) {
@@ -53,8 +65,8 @@ while (true) {
         $longitude = $station['longitude'];
 
         // Generate random data
-        $temperature = random_float(30.0, 35.0); // Generate random temperature between 25.0°C and 40.0°C
-        $humidity = random_float(40.0, 60.0); // Generate random humidity between 50.0% and 80.0%
+        $temperature = random_float(30.0, 35.0); // Generate random temperature between 30.0°C and 35.0°C
+        $humidity = random_float(40.0, 60.0); // Generate random humidity between 40.0% and 60.0%
 
         // Calculate heat index
         $heat_index = calculate_heat_index($temperature, $humidity);
@@ -80,7 +92,7 @@ while (true) {
         $context = stream_context_create($opts);
 
         // Send the POST request to sensor_receiver.php
-        $response = @file_get_contents('http://localhost/heat_w8_db/php/sensor_receiver.php', false, $context);
+        $response = @file_get_contents('http://localhost/heat_index/php/sensor_receiver.php', false, $context);
 
         // Check if request was successful
         if ($response !== false) {
@@ -91,6 +103,6 @@ while (true) {
         }
     }
     // Wait for 60 seconds before the next iteration
-    sleep(1);
+    sleep(60);
 }
 ?>
